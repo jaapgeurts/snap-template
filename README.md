@@ -1,4 +1,4 @@
-# Snap! Web Framwork tutorial template
+# Snap! Web Framework tutorial template
 
 This template demonstrates the basic use of the Snap! web framework. It is also used as the starting point for the Snap! tutorial.
 
@@ -10,5 +10,5 @@ This template demonstrates the basic use of the Snap! web framework. It is also 
 * Once Eclipse has built the project open a shell and goto the workspace folder run the debug(unix/mac) or debug.bat(windows) scripts.
 
 ## Requirements
-Installed Gradle build system
-Java JRE 8 or JDK 8
+* Installed Gradle build system
+* Java JRE 8 or JDK 8
