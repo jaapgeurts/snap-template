@@ -20,16 +20,36 @@ Open a terminal session and go to the root folder of the project (where the `bui
 We'll walk through all parts of the template so that you will learn how it works.
 
 ### HTML
-Go back to Eclipse and open the HTML template(`src/main/webapp/index.html`) file.
+Go back to Eclipse and open the HTML template `src/main/webapp/index.html` file.
 
-The HTML file is a very basic HTML file and there shouldn't be any surprised here except for the tags.
+    @args String greeting
+    <html>
+        <head>
+            <title>My Blog Demo App</title>
+        </head>
+        <body>
+            <p>This is a demo app that outputs a simple greeting</p>
+            <p>@greeting</p>
+        </body>
+    </html>
 
-There are few basic things you should know about Rythm.
-* Rythm uses the @ symbol in front of commands.
-* Variables passed into the html file must be declared with @args. Arguments can be of any type
+
+The HTML file is a very basic HTML file and there shouldn't be any surprises here except for the tags.
+
+There are few basic things you should know about the tags.
+* Tags are prefixed by a @ symbol.
+* Variables passed into the html file must be declared with @args. Arguments can be of any Java type.
 
 You can use the variables you declared anywhere in the HTML.
 
+Declare the template argument greeting. You can use this later as @greeting.
+
+    @args String greeting
+
+This is where we use the greeting.
+    <p>This is a demo app that outputs a simple greeting</p>
+	<p>@greeting</p>
+    
 Note: Snap! uses [Rythm Engine](http://www.rythmengine.org) as its templating engine.
 
 
@@ -54,19 +74,20 @@ Note that: No subclassing, implementing interfaces or special annotations are ne
 Now the method that gets called when the index page is retrieved.
 
     @RouteOptions(methods = { HttpMethod.GET })
-        public RequestResult index(RequestContext context) {
+    public RequestResult index(RequestContext context) {
 
 This method is annotated with RouteOptions to indicate that only the HTTP GET method is allowed. If a POST was performed on this URL it would be an error.
 
 The next line loads the template that we will return. This template will get rendered.
 
-            TemplateView view = new TemplateView("index.html");
+    TemplateView view = new TemplateView("index.html");
 
 Note that the file that is loaded is relative to the `src/main/webapp` folder. This folder is the root folder of your web application when it is running.
 
-In the next line we'll add a parameter to the template so that it can be rendered. Finally we return the view.
-            view.addParameter("greeting", "Congratulations. It's working.");
-            return view;
+In the next line we'll add a parameter to the template so that it can be rendered. Note that the parameter name must match the argument in the HTML file. Finally we return the view.
+
+    view.addParameter("greeting", "Congratulations. It's working.");
+    return view;
 
 ### routes.conf
 
