@@ -8,7 +8,7 @@ import snap.views.TemplateView;
 
 public class HomeController {
 	@RouteOptions(methods = { HttpMethod.GET })
-	public RequestResult showHome(RequestContext context) {
+	public RequestResult index(RequestContext context) {
 		TemplateView view = new TemplateView("index.html");
 		view.addParameter("greeting", "Congratulations. It's working");
 		return view;

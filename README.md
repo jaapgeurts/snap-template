@@ -12,3 +12,6 @@ This template demonstrates the basic use of the Snap! web framework. It is also 
 ## Requirements
 * Installed Gradle build system
 * Java JRE 8 or JDK 8
+
+## Running the example
+Open a terminal session and go to the root folder of the project (where the `build.gradle` is). From there execute `gradle appRun`. This will start the project webserver. Now open your browser and go to [http://localhost:9100](http://localhost:9100)  

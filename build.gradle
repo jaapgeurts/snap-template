@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'war'
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
 buildscript {
     repositories {
@@ -8,7 +9,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath (group: 'com.sahlbach.gradle', name: 'gradle-jetty-eclipse-plugin', version: '1.9.+')
         classpath "com.github.houbie:lesscss-gradle-plugin:1.0.3-less-1.7.0"
     }
 }
@@ -29,7 +29,6 @@ eclipse {
     }
 }
 
-apply plugin: 'jettyEclipse'
 apply plugin: "lesscss"
 
 def environment = hasProperty( 'env' ) ? env : 'dev'
@@ -76,8 +75,12 @@ lessc {
     destinationDir = "src/main/webapp/css"
 }
 
-jettyEclipse  {
-    httpPort = 9100
+gretty {
+  // supported values:
+  // 'jetty7', 'jetty8', 'jetty9', 'tomcat7', 'tomcat8'
+  contextPath = '/'
+  servletContainer = 'jetty9'
+  httpPort = 9100
 }
 
 war {
