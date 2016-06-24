@@ -22,17 +22,18 @@ We'll walk through all parts of the template so that you will learn how it works
 ### HTML
 Go back to Eclipse and open the HTML template `src/main/webapp/index.html` file.
 
-    @args String greeting
-    <html>
-        <head>
-            <title>My Blog Demo App</title>
-        </head>
-        <body>
-            <p>This is a demo app that outputs a simple greeting</p>
-            <p>@greeting</p>
-        </body>
-    </html>
-
+```html
+@args String greeting
+<html>
+    <head>
+        <title>My Blog Demo App</title>
+    </head>
+    <body>
+        <p>This is a demo app that outputs a simple greeting</p>
+        <p>@greeting</p>
+    </body>
+</html>
+```
 
 The HTML file is a very basic HTML file and there shouldn't be any surprises here except for the tags.
 
@@ -56,38 +57,48 @@ Note: Snap! uses [Rythm Engine](http://www.rythmengine.org) as its templating en
 ### Java
 Now open the java controller (`src/main/java/blog/HomeController.java`) file.
 
-    public class HomeController {
-        @RouteOptions(methods = { HttpMethod.GET })
-        public RequestResult index(RequestContext context) {
-            TemplateView view = new TemplateView("index.html");
-            view.addParameter("greeting", "Congratulations. It's working.");
-            return view;
-        }
+```java
+public class HomeController {
+    @RouteOptions(methods = { HttpMethod.GET })
+    public RequestResult index(RequestContext context) {
+        TemplateView view = new TemplateView("index.html");
+        view.addParameter("greeting", "Congratulations. It's working.");
+        return view;
     }
+}
+```
 
 In the controller file you will see the name of the Controller Class. 
 
-    public class HomeController {
+```java
+public class HomeController {
+```
 
 Note that: No subclassing, implementing interfaces or special annotations is necessary to use a class as a controller. Snap! let's you use any POJO object as a controller. However you can use implement the Snap.Controller interface if you wish.
     
 Now the method that gets called when the index page is retrieved.
 
-    @RouteOptions(methods = { HttpMethod.GET })
-    public RequestResult index(RequestContext context) {
+```java
+@RouteOptions(methods = { HttpMethod.GET })
+public RequestResult index(RequestContext context) {
+```
 
 This method is annotated with RouteOptions to indicate that only the HTTP GET method is allowed. If a POST was performed on this URL it would be an error.
 
 The next line loads the template that we will return. This template will get rendered.
 
-    TemplateView view = new TemplateView("index.html");
+```java
+TemplateView view = new TemplateView("index.html");
+```
 
 Note that the file that is loaded is relative to the `src/main/webapp` folder. This folder is the root folder of your web application when it is running.
 
 In the next line we'll add a parameter to the template so that it can be rendered. Note that the parameter name must match the argument in the HTML file. Finally we return the view.
 
-    view.addParameter("greeting", "Congratulations. It's working.");
-    return view;
+```java
+view.addParameter("greeting", "Congratulations. It's working.");
+return view;
+```
 
 ### routes.conf
 
@@ -112,6 +123,7 @@ Open the `routes.conf` file in the `src/main/resources/dev` folder. This file ha
 `@rootlink("aliasname")` - Produce a link with full http and host name followed by the URL.
 
 `@label(form, "fieldname")` - Produce a HTML label. The output is defined by the annotation of the `fieldname` in the `form`.
+
 `@field(form, "fieldname")` - Produce a HTML field. The input type will depend on the annotation in the `form` for the `fieldname`
 
 ## Example
@@ -167,22 +179,24 @@ In order to use forms authentication we need to use forms first.
 **** Using forms
 Create a new public class named LoginForm. Like so:
 
-    public class LoginForm extends Form
-    {
-      @TextField(id = "loginname", label = "Login")
-      public String loginName;
-    
-      @PasswordField(id = "password", label = "Password")
-      public String password;
-    
-      @SubmitField(id = "submit", label = "Login")
-      public String submit;
-      
-      public LoginForm(RequestContext context)
-      {
-        super(context);
-      }
-    }
+```java
+public class LoginForm extends Form
+{
+  @TextField(id = "loginname", label = "Login")
+  public String loginName;
+
+  @PasswordField(id = "password", label = "Password")
+  public String password;
+
+  @SubmitField(id = "submit", label = "Login")
+  public String submit;
+  
+  public LoginForm(RequestContext context)
+  {
+    super(context);
+  }
+}
+```
 
 A form must contain a public constructor that accepts a `RequestContext`.
 // explain the various annotations
@@ -192,62 +206,69 @@ For validation you can use any Validation API, but I recommend Hibernate validat
 
 Add the following two dependencies to the build.gradle file.
 
-    compile 'javax.validation:validation-api:1.1.0.Final'
-    compile 'org.hibernate:hibernate-validator:5.1.3.Final'
+```gradle
+compile 'javax.validation:validation-api:1.1.0.Final'
+compile 'org.hibernate:hibernate-validator:5.1.3.Final'
+```
 
 Add the `@NotBlank` to the loginName and the password
 Annotate the LoginForm class methods as follows:
 
-    public class LoginForm extends Form
-    {
-      @TextField(id = "loginname", label = "Login")
-      @NotBlank(message = "Login required")
-      public String loginName;
-    
-      @PasswordField(id = "password", label = "Password")
-      @NotBlank(message = "Password required")
-      public String password;
-      
-      ...
-      
-    }
+```java
+public class LoginForm extends Form
+{
+  @TextField(id = "loginname", label = "Login")
+  @NotBlank(message = "Login required")
+  public String loginName;
+
+  @PasswordField(id = "password", label = "Password")
+  @NotBlank(message = "Password required")
+  public String password;
+  
+  ...
+  
+}
+```
 
 Now add the form to your HTML.
 
-    @import snap.forms.Form
-    @args Form loginform
-    ...
-    <form action='@link("login")' method='post'>
-      <fieldset>
-        @label(loginform,"loginName")
-        @field(form: loginform, field: "loginName", class: "form-control")
-      </fieldset>
-      <fieldset>
-        @label(loginform,"password")
-        @field(form: loginform, field: "password", class: "form-control")
-      </fieldset>
-      @field(form: loginform, field: "submit", class: "btn btn-primary")
-    </form>
-    ...
-    
+```html
+@import snap.forms.Form
+@args Form loginform
+...
+<form action='@link("login")' method='post'>
+  <fieldset>
+    @label(loginform,"loginName")
+    @field(form: loginform, field: "loginName", class: "form-control")
+  </fieldset>
+  <fieldset>
+    @label(loginform,"password")
+    @field(form: loginform, field: "password", class: "form-control")
+  </fieldset>
+  @field(form: loginform, field: "submit", class: "btn btn-primary")
+</form>
+...
+```
+
 In your login controller method add the following code to the login controller method.
 
-      public RequestResult login(RequestContext context)
+```java
+public RequestResult login(RequestContext context)
+{
+    LoginForm form = new LoginForm(context);
+    if (context.getMethod() == HttpMethod.POST)
+    {
+      form.assignFieldValues();
+      if (form.isValid())
       {
-        LoginForm form = new LoginForm(context);
-        if (context.getMethod() == HttpMethod.POST)
-        {
-          form.assignFieldValues();
-          if (form.isValid())
-          {
-          }
-        }
-        
-        TemplateView view = new TemplateView("login.html");
-        view.addParameter("loginform",form) // the name form must match the Form argument in the html template
-        return view;
       }
+    }
 
+    TemplateView view = new TemplateView("login.html");
+    view.addParameter("loginform",form) // the name form must match the Form argument in the html template
+    return view;
+}
+```
     
 # Writing a custom annotation.
 
@@ -267,37 +288,45 @@ To validate the token upon each request we will write a custom Annotation.
 
 ### 1. Create the token annotation
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(value = { ElementType.METHOD })
-    public @interface SecretTokenRequired
-    {
-    }
-    
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(value = { ElementType.METHOD })
+public @interface SecretTokenRequired
+{
+}
+```
+
 ### 2. Create the Annotation Handler
 
-    public class SecretTokenRequiredHandler implements AnnotationHandler
-    {
-      @Override
-      public void execute(Object controller, Method method, Annotation annotation, RequestContext context)
-      {    
-      }
-    }
+```java
+public class SecretTokenRequiredHandler implements AnnotationHandler
+{
+  @Override
+  public void execute(Object controller, Method method, Annotation annotation, RequestContext context)
+  {    
+  }
+}
+```
 
 ### 3. Register it with Snap!
 
 In your MyBlogApp.java add the following lines to `public void init(ServletConfig config)` just below: `super.init(config)`
 
-    registerAnnotation(SecretTokenRequired.class, new SecretTokenRequiredHandler());
+```java
+registerAnnotation(SecretTokenRequired.class, new SecretTokenRequiredHandler());
+```
 
 Now we'll decorate all controller methods with the new annotation.
 
-    ...
-    @RouteOptions(methods = { HttpMethod.GET, HttpMethod.POST })
-    @SecretTokenRequired
-    public RequestResult index(RequestContext context) {
-    ...
-    }
-    
+```java
+...
+@RouteOptions(methods = { HttpMethod.GET, HttpMethod.POST })
+@SecretTokenRequired
+public RequestResult index(RequestContext context) {
+...
+}
+```
+
 Now let's add some useful code to the `SecretTokenRequiredHandler`. In the secret token method we'll check if the token cookie has been set and if not we'll throw a `AuthenticationException`. This exception combined with the setting 
 `snap.login.redirect=true` and the `snap.login.redirect.url=/entersecret` will prompt the user to enter the secret.
 
@@ -311,78 +340,84 @@ Add a simple HTML page that prompts the user to either their secret. ( See `Form
 
 Add the corresponding method to the home controller. Note that this method does not require the `@SecretTokenRequired` annotation since the visitor will enter it here. 
 
-    ...
-    @RouteOptions(methods = { HttpMethod.GET, HttpMethod.POST })
-    public RequestResult enterSecret(RequestContext context) {
-        EnterSecretForm form = new EnterSecretForm(context);
-        if (context.getMethod() == HttpMethod.POST)
-        {
-          form.assignFieldValues();
-        }
-    
-        TemplateView view = new TemplateView("entersecret.html");
-        view.addParameter("form", form);
-        return view;
+```java
+...
+@RouteOptions(methods = { HttpMethod.GET, HttpMethod.POST })
+public RequestResult enterSecret(RequestContext context) {
+    EnterSecretForm form = new EnterSecretForm(context);
+    if (context.getMethod() == HttpMethod.POST)
+    {
+      form.assignFieldValues();
     }
-    
+
+    TemplateView view = new TemplateView("entersecret.html");
+    view.addParameter("form", form);
+    return view;
+}
+```
+
 Now the view will show. We'll leave this and add the code for the POST section later. First we'll add code to the `SecretTokenRequiredHandler` so that Snap! will redirect users if they don't have the secret.
 
 Before we code we'll add the secret to our settings file. Open `src/main/resource/{dev,prod}/blog.properties` and add a new property: `blog.secrettoken=mysupersecrettoken`.
 
 Change the `SecretTokenRequiredHandler` to:
 
-    public class SecretTokenRequiredHandler implements AnnotationHandler
-    {
-      private static final String BLOG_SECRET_TOKEN = "blog_secret_token";
-    
-      @Override
-      public void execute(Object controller, Method method, Annotation annotation, RequestContext context)
-      {
-        Cookie cookie = context.getCookie(BLOG_SECRET_TOKEN);
-        if (cookie == null) // No cookie has been set
-          throw new AuthenticationException("You are not allowed to login");
-    
-        if (!MyBlogApp.get("secrettoken").equals(cookie.getValue())) // the secret is incorrect
-          throw new AuthenticationException("Invalid secret");
-    
-        // Do nothing and let the visitor continue
-      }
-    }
+```java
+public class SecretTokenRequiredHandler implements AnnotationHandler
+{
+  private static final String BLOG_SECRET_TOKEN = "blog_secret_token";
+
+  @Override
+  public void execute(Object controller, Method method, Annotation annotation, RequestContext context)
+  {
+    Cookie cookie = context.getCookie(BLOG_SECRET_TOKEN);
+    if (cookie == null) // No cookie has been set
+      throw new AuthenticationException("You are not allowed to login");
+
+    if (!MyBlogApp.get("secrettoken").equals(cookie.getValue())) // the secret is incorrect
+      throw new AuthenticationException("Invalid secret");
+
+    // Do nothing and let the visitor continue
+  }
+}
+```
 
 We'll also need to change the POST section of the `enterSecret(RequestContext context)` method.
 What we'll do is this: Get the token from the settings and compare it to the token from the form. If they match, then send a cookie to the user with the secret. Our `SecretTokenRequiredHandler` will read the cookie value on the next visit. Finally redirect the user to where they came from or to the home page. Otherwise report error to the visitor.
 
 
-    @RouteOptions(methods = { HttpMethod.GET, HttpMethod.POST })
-    public RequestResult enterSecret(RequestContext context) {
-        EnterSecretForm form = new EnterSecretForm(context);
-        if (context.getMethod() == HttpMethod.POST)
+```java
+@RouteOptions(methods = { HttpMethod.GET, HttpMethod.POST })
+public RequestResult enterSecret(RequestContext context) {
+    EnterSecretForm form = new EnterSecretForm(context);
+    if (context.getMethod() == HttpMethod.POST)
+    {
+        form.assignFieldValues();
+        String token = MyBlogApp.get("secrettoken");
+        if (token.equals(form.secret))
         {
-            form.assignFieldValues();
-            String token = MyBlogApp.get("secrettoken");
-            if (token.equals(form.secret))
-            {
-                // the user posted secret is correct. Set the cookie for future use
-                Cookie cookie = new Cookie(SecretTokenRequiredHandler.BLOG_SECRET_TOKEN, token);
-                cookie.setMaxAge(10 * 365 * 24 * 60 * 60); // expire after 10 years
-                cookie.setPath("/");
-                context.addCookie(cookie);
-                // redirect the user to the home page
-                String next = context.getParamPostGet("next");
-                if (next == null || "".equals(next))
-                    next = "/";
-                return new HttpRedirect(next);
-            }
-            else
-            {
-              form.setFieldError("secret", "Incorrect secret");
-              form.addError("The secret you entered is not correct");
-            }
+            // the user posted secret is correct. Set the cookie for future use
+            Cookie cookie = new Cookie(SecretTokenRequiredHandler.BLOG_SECRET_TOKEN, token);
+            cookie.setMaxAge(10 * 365 * 24 * 60 * 60); // expire after 10 years
+            cookie.setPath("/");
+            context.addCookie(cookie);
+            // redirect the user to the home page
+            String next = context.getParamPostGet("next");
+            if (next == null || "".equals(next))
+                next = "/";
+            return new HttpRedirect(next);
         }
-    
-        TemplateView view = new TemplateView("entersecret.html");
-        view.addParameter("form", form);
-        return view;
+        else
+        {
+          form.setFieldError("secret", "Incorrect secret");
+          form.addError("The secret you entered is not correct");
+        }
     }
-    
+
+    TemplateView view = new TemplateView("entersecret.html");
+    view.addParameter("form", form);
+    return view;
+}
+```
+
 Done!
