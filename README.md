@@ -6,8 +6,8 @@ This template demonstrates the basic use of the Snap! web framework. It is also 
 * Install the Eclipse Gradle plugin
 * Create a new workspace or create a new folder in your existing workspace.
 * Copy this project to a folder to the new workspace/folder
-* Import a new Gradle project using File -> import
-* Once Eclipse has built the project open a shell and goto the workspace folder run the debug(unix/mac) or debug.bat(windows) scripts.
+* Import a new Gradle project using File -> import -> Gradle (STS)
+* Once Eclipse has built the project open a shell and goto the workspace folder run the `gradlew appRun`.
 
 ## Requirements
 * Installed Gradle build system
