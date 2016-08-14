@@ -7,17 +7,19 @@ This template demonstrates the basic use of the Snap! web framework. It is also 
 * Create a new workspace or create a new folder in your existing workspace.
 * Copy this project to a folder to the new workspace/folder
 * Import a new Gradle project using File -> import -> Gradle (STS)
+- Open the folder with the project.
+- Click 'build model'
+- Select the project you want to import 
 * Once Eclipse has built the project open a shell and goto the workspace folder run the `gradlew appRun`.
 
 ## Requirements
-* Installed Gradle build system
-* Java JRE 8 or JDK 8
+* Java JDK 8
 
 ## Running the example
-Open a terminal session and go to the root folder of the project (where the `build.gradle` is). From there execute `gradle appStartWar`. This will start the project webserver. Now open your browser and go to [http://localhost:9100](http://localhost:9100)
+Open a terminal session and go to the root folder of the project (where the `build.gradle` is). From there execute `./gradlew appRun`. This will start the project webserver. Now open your browser and go to [http://localhost:9100](http://localhost:9100)
 
 ## Walkthrough
-We'll walk through all parts of the template so that you will learn how it works.
+Let's walk through all parts of the template so that you will learn how it works.
 
 ### HTML
 Go back to Eclipse and open the HTML template `src/main/webapp/index.html` file.

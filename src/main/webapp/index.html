@@ -1,22 +1,10 @@
-@import snap.forms.Form
-@args Form loginform
-  
-    
+@args String greeting
 <html>
 <head>
-<title>My Blog Demo Login Page</title>
+<title>My Blog Demo App</title>
 </head>
 <body>
-<form action='@link("ogin")' method='post'>
-      <fieldset>
-        @label(loginform,"loginName")
-        @field(form: loginform, field: "loginName", class: "form-control")
-      </fieldset>
-      <fieldset>
-        @label(loginform,"password")
-        @field(form: loginform, field: "password", class: "form-control")
-      </fieldset>
-      @field(form: loginform, field: "submit", class: "btn btn-primary")
-    </form>
+	<p>This is a demo app that outputs a simple greeting</p>
+	<p>@greeting</p>
 </body>
 </html>

@@ -32,9 +32,13 @@ eclipse {
 apply plugin: "lesscss"
 
 def environment = hasProperty( 'env' ) ? env : 'dev'
-sourceSets.main.resources.srcDirs = [ 'src/main/resources/global' ]
-sourceSets.main.resources.srcDirs += 'src/main/resources/' + environment
+System.setProperty('environment',environment)
 
+sourceSets.main.resources.srcDirs = [ 
+              'src/main/resources/global',
+              "src/main/resources/${environment}"
+               ]
+               
 sourceCompatibility = 1.8
 version = '1.0'
 jar {
@@ -54,7 +58,7 @@ configurations.create('enhance')
 
 dependencies {
     compile  'org.rythmengine:rythm-engine:1.0.1',
-             'org.slf4j:slf4j-api:1.7.7',
+    		 'org.slf4j:slf4j-api:1.7.7',
              'org.slf4j:slf4j-log4j12:1.7.7',
              'log4j:log4j:1.2.17',
 			 'org.jruby.joni:joni:2.1.4'
@@ -75,6 +79,29 @@ lessc {
     destinationDir = "src/main/webapp/css"
 }
 
+afterEvaluate { project ->
+  project.tasks.prepareInplaceWebApp << {
+    println "Copying ${environment} files"
+    def folderCollection = files( "${project.buildDir}/inplaceWebapp/META-INF",
+                            "${project.buildDir}/inplaceWebapp/WEB-INF" )
+    folderCollection.each { File folder ->
+      if (!folder.exists()) {
+        folder.mkdirs()
+      }
+    }
+    copy {
+      from "src/main/webxml/jetty9-env-${environment}.xml"
+      into "${project.buildDir}/inplaceWebapp/META-INF"
+      rename { "jetty9-env.xml" }
+    }
+    copy {     
+      from "src/main/webxml/web-${environment}.xml"
+      into "${project.buildDir}/inplaceWebapp/WEB-INF"
+      rename { "web.xml" }
+    }    
+  }
+}
+
 gretty {
   // supported values:
   // 'jetty7', 'jetty8', 'jetty9', 'tomcat7', 'tomcat8'
@@ -83,10 +110,8 @@ gretty {
   httpPort = 9100
 }
 
+
 war {
     it.dependsOn lessc
-    dependencies {
-       compile name: 'snap-0.1'
-     }
-     webXml = file('src/main/webxml/web-'+environment+'.xml')
+     webXml = file("src/main/webxml/web-${environment}.xml")
 }
