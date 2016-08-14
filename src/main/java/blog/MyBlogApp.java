@@ -1,5 +1,9 @@
 package blog;
 
+import java.util.Properties;
+
+import javax.servlet.ServletConfig;
+
 import snap.WebApplication;
 
 public class MyBlogApp extends WebApplication {
